@@ -44,7 +44,7 @@ public class AuthController {
             pass = requestBody.getPassword();
         }
         
-        if (user == null || pass == null) {
+        if (user == null || pass == null || user.isBlank() || pass.isBlank()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(TokenResponse.builder()
                             .accessToken("Nom d'utilisateur et mot de passe requis")
@@ -60,7 +60,15 @@ public class AuthController {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             
             User existingUser = userRepository.findByUsername(user)
-                    .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+                    .orElse(null);
+            
+            if (existingUser == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(TokenResponse.builder()
+                                .accessToken("Utilisateur non trouvé")
+                                .tokenType("bearer")
+                                .build());
+            }
             
             if (existingUser.getIsActive() != null && !existingUser.getIsActive()) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN)
@@ -81,6 +89,12 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(TokenResponse.builder()
                             .accessToken("Nom d'utilisateur ou mot de passe incorrect")
+                            .tokenType("bearer")
+                            .build());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(TokenResponse.builder()
+                            .accessToken("Erreur: " + e.getMessage())
                             .tokenType("bearer")
                             .build());
         }

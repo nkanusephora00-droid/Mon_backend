@@ -2,6 +2,7 @@ package com.itaccess.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Data
 @NoArgsConstructor
@@ -16,6 +17,9 @@ public class TestSessionRequest {
     private Long applicationId;
     private String environnement;
     private String version;
+    
+    @JsonProperty("nom_document")
     private String nomDocument;
+    
     private String statut;
 }
