@@ -1,5 +1,3 @@
-# Configuration pour déploiement sur Render
-# IMPORTANT: Créez une DB PostgreSQL sur Render et configurez les variables ci-dessous manuellement
 services:
   - type: web
     name: itaccess-backend
@@ -8,17 +6,16 @@ services:
     dockerfilePath: ./Dockerfile
     dockerContext: .
     envVars:
-      # Configurer ces variables manuellement dans le dashboard Render
       - key: DB_HOST
-        value: "votre-db-host.render.com"  # Remplacer par votre host
+        value: "dpg-d7egn1n7f7vs739bvh10-a"
       - key: DB_PORT
         value: "5432"
       - key: DB_NAME
-        value: "votre_database"  # Remplacer par le nom de votre DB
+        value: "itaccess"
       - key: DB_USER
-        value: "votre_user"  # Remplacer par votre utilisateur
+        value: "itaccess_user"
       - key: DB_PASSWORD
-        value: "votre_password"  # Remplacer par votre mot de passe
+        value: "Vij9E2rXltNYcSMn6S2kKuqgOqWqRlXA"
       - key: JWT_SECRET
         generateValue: true
       - key: SERVER_PORT
