@@ -4,6 +4,7 @@ import com.itaccess.dto.TestDTO;
 import com.itaccess.dto.TestSessionDTO;
 import com.itaccess.dto.TestSessionRequest;
 import com.itaccess.entity.Application;
+import com.itaccess.entity.Test;
 import com.itaccess.entity.TestSession;
 import com.itaccess.exception.ResourceNotFoundException;
 import com.itaccess.repository.ApplicationRepository;
