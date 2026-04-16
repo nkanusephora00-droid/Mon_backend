@@ -1,13 +1,13 @@
 spring:
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:h2:mem:itaccessdb}
-    driver-class-name: ${SPRING_DATASOURCE_DRIVER_CLASS:org.h2.Driver}
-    username: ${SPRING_DATASOURCE_USERNAME:sa}
-    password: ${SPRING_DATASOURCE_PASSWORD:}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:itaccess}}
+    driver-class-name: ${SPRING_DATASOURCE_DRIVER_CLASS:org.postgresql.Driver}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:postgres}
   
   h2:
     console:
-      enabled: ${H2_CONSOLE_ENABLED:true}
+      enabled: ${H2_CONSOLE_ENABLED:false}
   
   jpa:
     hibernate:
@@ -15,7 +15,7 @@ spring:
     show-sql: false
     properties:
       hibernate:
-        dialect: ${HIBERNATE_DIALECT:org.hibernate.dialect.H2Dialect}
+        dialect: ${HIBERNATE_DIALECT:org.hibernate.dialect.PostgreSQLDialect}
 
 server:
   port: ${SERVER_PORT:8000}
