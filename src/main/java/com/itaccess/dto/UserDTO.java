@@ -25,6 +25,8 @@ public class UserDTO {
     
     private Boolean isActive;
     
+    private String profilePhoto;
+    
     private String createdAt;
     
     private String password;

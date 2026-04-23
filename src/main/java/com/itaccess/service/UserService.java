@@ -88,6 +88,39 @@ public class UserService {
         userRepository.deleteById(id);
     }
     
+    @Transactional
+    public UserDTO updateUserProfile(Long id, UserDTO dto) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Utilisateur non trouvé avec l'ID: " + id));
+        
+        if (dto.getEmail() != null && !dto.getEmail().equals(user.getEmail())) {
+            if (userRepository.existsByEmail(dto.getEmail())) {
+                throw new IllegalArgumentException("Email déjà enregistré");
+            }
+            user.setEmail(dto.getEmail());
+        }
+        
+        if (dto.getProfilePhoto() != null) {
+            user.setProfilePhoto(dto.getProfilePhoto());
+        }
+        
+        User updatedUser = userRepository.save(user);
+        return toDTO(updatedUser);
+    }
+    
+    @Transactional
+    public void changePassword(Long id, String oldPassword, String newPassword) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Utilisateur non trouvé avec l'ID: " + id));
+        
+        if (!passwordEncoder.matches(oldPassword, user.getHashedPassword())) {
+            throw new IllegalArgumentException("Ancien mot de passe incorrect");
+        }
+        
+        user.setHashedPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+    }
+    
     public UserDTO toDTO(User user) {
         return UserDTO.builder()
                 .id(user.getId())
@@ -95,6 +128,7 @@ public class UserService {
                 .email(user.getEmail())
                 .role(user.getRole())
                 .isActive(user.getIsActive())
+                .profilePhoto(user.getProfilePhoto())
                 .createdAt(user.getCreatedAt() != null ? user.getCreatedAt().toString() : null)
                 .build();
     }

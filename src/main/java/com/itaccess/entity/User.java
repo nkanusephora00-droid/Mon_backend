@@ -32,6 +32,9 @@ public class User {
     @Column(name = "is_active")
     private Boolean isActive;
     
+    @Column(name = "profile_photo", length = 1000)
+    private String profilePhoto;
+    
     @Column(name = "created_at")
     private LocalDateTime createdAt;
     

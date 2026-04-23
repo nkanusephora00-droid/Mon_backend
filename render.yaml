@@ -5,19 +5,26 @@ services:
     plan: free
     dockerfilePath: ./Dockerfile
     dockerContext: .
-    autoDeploy: true
     envVars:
-      - key: DB_HOST
-        value: "dpg-d7egn1n7f7vs739bvh10-a"
-      - key: DB_PORT
-        value: "5432"
-      - key: DB_NAME
-        value: "itaccess"
-      - key: DB_USER
-        value: "itaccess_user"
-      - key: DB_PASSWORD
-        value: "Vij9E2rXltNYcSMn6S2kKuqgOqWqRlXA"
+      - key: SPRING_DATASOURCE_URL
+        fromDatabase:
+          name: itaccess-db
+          property: connectionString
+      - key: SPRING_DATASOURCE_USERNAME
+        fromDatabase:
+          name: itaccess-db
+          property: user
+      - key: SPRING_DATASOURCE_PASSWORD
+        fromDatabase:
+          name: itaccess-db
+          property: password
       - key: JWT_SECRET
         generateValue: true
       - key: SERVER_PORT
-        value: "8000"
+        value: 8000
+
+databases:
+  - name: itaccess-db
+    databaseName: itaccess
+    user: itaccess_user
+    plan: free

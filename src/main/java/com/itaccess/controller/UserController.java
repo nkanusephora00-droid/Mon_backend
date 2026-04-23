@@ -1,6 +1,9 @@
 package com.itaccess.controller;
 
+import com.itaccess.dto.PasswordChangeRequest;
 import com.itaccess.dto.UserDTO;
+import com.itaccess.security.CurrentUser;
+import com.itaccess.security.UserInfo;
 import com.itaccess.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -56,5 +59,28 @@ public class UserController {
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
+    }
+    
+    @GetMapping("/me")
+    @Operation(summary = "Profil actuel", description = "Retourne le profil de l'utilisateur connecté")
+    public ResponseEntity<UserDTO> getCurrentUser(@CurrentUser UserInfo currentUser) {
+        return ResponseEntity.ok(userService.getUserById(currentUser.getId()));
+    }
+    
+    @PutMapping("/me")
+    @Operation(summary = "Modifier le profil", description = "Met à jour le profil de l'utilisateur connecté")
+    public ResponseEntity<UserDTO> updateCurrentUser(
+            @CurrentUser UserInfo currentUser,
+            @Valid @RequestBody UserDTO dto) {
+        return ResponseEntity.ok(userService.updateUserProfile(currentUser.getId(), dto));
+    }
+    
+    @PutMapping("/me/password")
+    @Operation(summary = "Changer le mot de passe", description = "Change le mot de passe de l'utilisateur connecté")
+    public ResponseEntity<Void> changePassword(
+            @CurrentUser UserInfo currentUser,
+            @RequestBody PasswordChangeRequest request) {
+        userService.changePassword(currentUser.getId(), request.getOldPassword(), request.getNewPassword());
+        return ResponseEntity.ok().build();
     }
 }
